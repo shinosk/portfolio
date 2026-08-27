@@ -74,6 +74,7 @@
         <li class="nav__item nav__item--works"><a href="#works">Works</a></li>
         <li class="nav__item nav__item--skills"><a href="#skills">Skills</a></li>
         <li class="nav__item nav__item--history"><a href="#history">History</a></li>
+        <li class="nav__item nav__item--card"><a href="#card">Card</a></li>
         <li class="nav__item nav__item--contact"><a href="#contact">Contact</a></li>
       </ul>
     </nav>
@@ -400,9 +401,14 @@
             <h3 class="row__title">Freedom Band Circle<span class="role">学生責任者</span></h3>
             <p>
               2026年7月に立ち上げ、大学の公認クラブとして認められました。
-              学内に音楽をやる場所をつくりたくて、設立の手続きから運営までを担当しています。
+              規約の作成、大学への申請手続き、出納簿の整備までを自分で行い、
+              現在は学生責任者として運営を担当しています。
             </p>
-            <ul class="tags"><li>立ち上げ</li><li>組織運営</li><li>学内調整</li></ul>
+            <p>
+              ゼロから団体をつくるには、活動そのものより先に「どういうルールで動く組織なのか」を
+              決める必要がありました。ここでも、つくる前に決める工程に時間をかけています。
+            </p>
+            <ul class="tags"><li>規約作成</li><li>申請手続き</li><li>会計管理</li><li>組織運営</li></ul>
           </div>
         </div>
 
@@ -599,7 +605,7 @@
         <div class="row">
           <p class="row__label">組織・コミュニケーション</p>
           <div class="row__body">
-            <ul class="tags"><li>組織運営</li><li>業務標準化</li><li>渉外・調整</li><li>イベント運営</li><li>プレゼンテーション</li></ul>
+            <ul class="tags"><li>組織運営</li><li>規約・規程の作成</li><li>業務標準化</li><li>会計管理</li><li>渉外・調整</li><li>イベント運営</li><li>プレゼンテーション</li></ul>
           </div>
         </div>
 
@@ -671,7 +677,7 @@
           <div class="tl__body">
             <h3 class="tl__title">Freedom Band Circle 設立（愛知工業大学 公認クラブ）</h3>
             <p>
-              学内に音楽をやる場所をつくるため、公認クラブとして立ち上げ。
+              公認クラブとして立ち上げ。規約の作成、大学への申請、出納簿の整備までを行いました。
               現在も学生責任者を務めています。
             </p>
           </div>
@@ -687,6 +693,40 @@
           </div>
         </li>
       </ol>
+    </div>
+  </section>
+
+  <!-- ============ CARD（デジタル名刺） ============ -->
+  <!-- assets/card/front.pdf と back.pdf を置くと表示されます（未設置ならセクションごと非表示） -->
+  <section class="section" id="card">
+    <div class="container">
+      <div class="section__head">
+        <p class="section__label"><span class="section__num"></span>Card</p>
+        <div class="section__intro">
+          <h2 class="section__title">デジタル名刺。</h2>
+          <p class="section__lead">
+            実際にお渡ししている名刺です。ドラッグで回して、両面をご覧いただけます。
+          </p>
+        </div>
+      </div>
+
+      <div class="card3d" id="card3d"
+           data-front="assets/card/front.pdf"
+           data-back="assets/card/back.pdf">
+        <div class="card3d__stage">
+          <canvas class="card3d__canvas" aria-label="3Dで表示した名刺" role="img"></canvas>
+          <p class="card3d__status" role="status">名刺を読み込んでいます…</p>
+        </div>
+        <div class="card3d__ui">
+          <button type="button" class="card3d__btn" data-card-flip disabled>裏返す</button>
+          <button type="button" class="card3d__btn" data-card-reset disabled>正面に戻す</button>
+          <p class="card3d__hint">
+            ドラッグで回転
+            <a href="assets/card/front.pdf" target="_blank" rel="noopener">表 PDF</a>
+            <a href="assets/card/back.pdf" target="_blank" rel="noopener">裏 PDF</a>
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -745,5 +785,6 @@
 </footer>
 
 <script src="assets/js/main.js" defer></script>
+<script type="module" src="assets/js/card.js"></script>
 </body>
 </html>

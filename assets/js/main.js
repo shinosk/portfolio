@@ -192,6 +192,12 @@
     revealTargets.forEach(function (el) { el.classList.add('is-visible'); });
   }
 
+  // 名刺セクションのように、あとから表示・非表示が決まる要素があるため
+  document.addEventListener('portfolio:layoutchange', function () {
+    numberSections();
+    updateActiveNav();
+  });
+
   /* ---------- 初期化 ---------- */
   applyMode(readInitialMode(), { updateUrl: false });
   updateActiveNav();
