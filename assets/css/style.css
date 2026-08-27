@@ -135,13 +135,13 @@ main { display: flex; flex-direction: column; }
   width: 22px; height: 22px; border-radius: 7px;
   background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #9d6bff));
 }
-.logo__text { font-size: .95rem; }
+.logo__text { font-size: .95rem; white-space: nowrap; }
 
 .nav { margin-left: auto; }
 .nav__list { display: flex; align-items: center; gap: 4px; }
 .nav__item a {
-  display: block; padding: 8px 12px; border-radius: 8px;
-  font-size: .86rem; font-weight: 500; color: var(--text-sub);
+  display: block; padding: 8px 10px; border-radius: 8px; white-space: nowrap;
+  font-size: .84rem; font-weight: 500; color: var(--text-sub);
   transition: color .2s var(--ease), background .2s var(--ease);
 }
 .nav__item a:hover { color: var(--text); background: var(--accent-soft); }
@@ -187,6 +187,27 @@ html[data-mode="business"] .switch__thumb { transform: translateX(100%); }
     radial-gradient(40% 50% at 22% 40%, var(--accent-soft), transparent 70%),
     radial-gradient(35% 45% at 78% 30%, rgba(157, 107, 255, .07), transparent 70%);
 }
+.hero__inner { display: grid; grid-template-columns: 1fr; }
+.hero__text, .hero__facts { grid-column: 1 / -1; }
+
+/* 写真は assets/img/profile.jpg が存在するときだけ表示する（JS が has-photo を付与） */
+.hero__media { display: none; margin: 0 0 44px; }
+.hero.has-photo .hero__media { display: block; }
+.hero__media img {
+  width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: center 22%;
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-hover);
+}
+
+.hero__name {
+  margin: -6px 0 26px;
+  font-size: 1.05rem; font-weight: 700; letter-spacing: .04em;
+}
+.hero__name span {
+  margin-left: 12px;
+  font-family: var(--font-en); font-size: .8rem; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--text-mute);
+}
+
 .hero__eyebrow {
   display: inline-flex; align-items: center; gap: 9px;
   padding: 6px 14px 6px 12px; margin-bottom: 26px;
@@ -231,6 +252,18 @@ html[data-mode="business"] .switch__thumb { transform: translateX(100%); }
 .hero__facts strong { font-size: 1.9rem; font-weight: 700; line-height: 1; color: var(--accent); }
 .hero__facts span { font-size: .82rem; color: var(--text-sub); }
 
+@media (min-width: 900px) {
+  .hero.has-photo .hero__inner {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+    column-gap: clamp(36px, 5vw, 68px);
+    align-items: center;
+  }
+  .hero.has-photo .hero__text  { grid-column: 1; }
+  .hero.has-photo .hero__media { grid-column: 2; margin: 0; }
+  /* 2カラム時は見出しが折り返しすぎないよう少し詰める */
+  .hero.has-photo .hero__title { font-size: clamp(2rem, 4.3vw, 3.05rem); }
+}
+
 /* ---------- 5. Components ---------- */
 .about { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 56px); align-items: start; }
 .about__body p + p { margin-top: 20px; }
@@ -257,6 +290,16 @@ html[data-mode="business"] .switch__thumb { transform: translateX(100%); }
   font-size: .78rem; font-weight: 700; letter-spacing: .1em; color: var(--text-mute); opacity: .6;
 }
 .card--service .card__title { padding-right: 34px; }
+
+.card__link {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 16px; padding-bottom: 2px;
+  border-bottom: 1px solid var(--accent-line);
+  font-family: var(--font-en); font-size: .78rem; font-weight: 600; color: var(--accent);
+  transition: border-color .2s var(--ease), gap .2s var(--ease);
+}
+.card__link::after { content: "↗"; font-size: .95em; }
+.card__link:hover { border-bottom-color: var(--accent); gap: 8px; }
 
 .list { display: grid; gap: 9px; }
 .list li { position: relative; padding-left: 20px; font-size: .9rem; color: var(--text-sub); }
@@ -331,7 +374,18 @@ html[data-mode="business"] .switch__thumb { transform: translateX(100%); }
 
 /* contact */
 .section--contact { border-top: 1px solid var(--border); }
-.contact { display: flex; flex-wrap: wrap; align-items: center; gap: 28px; }
+.contact { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 30px; }
+.contact__addr { font-family: var(--font-en); font-size: .95rem; font-weight: 600; line-height: 1.6; }
+.contact__addr span {
+  display: block; margin-top: 2px;
+  font-family: var(--font-jp); font-size: .78rem; font-weight: 400;
+  letter-spacing: .01em; color: var(--text-sub);
+}
+.contact__sites { margin-top: 40px; padding-top: 26px; border-top: 1px solid var(--border); }
+.contact__sites-label {
+  margin-bottom: 12px;
+  font-size: .74rem; font-weight: 600; letter-spacing: .06em; color: var(--text-mute);
+}
 .contact__links { display: flex; flex-wrap: wrap; gap: 8px; }
 .contact__links a {
   display: block; padding: 10px 18px; border-radius: 999px;
@@ -345,6 +399,11 @@ html[data-mode="business"] .switch__thumb { transform: translateX(100%); }
 .footer { padding: 36px 0; background: var(--bg); border-top: 1px solid var(--border); }
 .footer__inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
 .footer__name { font-weight: 700; font-size: .9rem; }
+.footer__name span {
+  margin-left: 10px;
+  font-family: var(--font-en); font-size: .76rem; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--text-mute);
+}
 .footer__copy { font-size: .78rem; color: var(--text-mute); font-family: var(--font-en); }
 
 /* ---------- 7. Mode switching ---------- */
@@ -415,15 +474,8 @@ html[data-mode="business"] .nav__item--contact  { order: 8; }
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 960px) {
-  .about { grid-template-columns: 1fr; }
-  .switch__long { display: none; }
-  .switch__short { display: inline; }
-  .switch__btn { padding: 7px 18px; }
-}
-
-@media (max-width: 780px) {
-  :root { --header-h: 60px; }
+@media (max-width: 1100px) {
+  /* ナビはドロワーへ。事業モードのメニュー項目数でもヘッダーが崩れない */
   .burger { display: block; margin-left: 4px; }
   .nav {
     position: fixed; inset: var(--header-h) 0 auto 0;
@@ -436,10 +488,22 @@ html[data-mode="business"] .nav__item--contact  { order: 8; }
   .nav__list { flex-direction: column; align-items: stretch; gap: 2px; }
   .nav__item a { padding: 13px 12px; font-size: .95rem; }
   .switch { margin-left: auto; }
+}
+
+@media (max-width: 960px) {
+  .about { grid-template-columns: 1fr; }
+  .switch__long { display: none; }
+  .switch__short { display: inline; }
+  .switch__btn { padding: 7px 18px; }
+}
+
+@media (max-width: 780px) {
+  :root { --header-h: 60px; }
   .sp-br { display: block; }
-  .tl { grid-template-columns: 1fr; gap: 6px; }
-  .hero__facts { gap: 20px 32px; }
   .grid--2 { grid-template-columns: 1fr; }
+  .tl { grid-template-columns: 1fr; gap: 6px; }
+  .tl__year br { display: none; }
+  .hero__facts { gap: 20px 32px; }
   .contact { flex-direction: column; align-items: stretch; }
   .contact .btn--lg { width: 100%; }
 }

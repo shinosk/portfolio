@@ -152,7 +152,7 @@
 
   /* ---------- 4. フェードイン ---------- */
   var revealTargets = Array.prototype.slice.call(
-    document.querySelectorAll('.section__eyebrow, .section__title, .section__lead, .card, .tl, .contact, .note')
+    document.querySelectorAll('.section__eyebrow, .section__title, .section__lead, .card, .tl, .contact, .contact__sites, .note')
   );
   revealTargets.forEach(function (el) { el.classList.add('reveal'); });
 
@@ -185,6 +185,19 @@
 
   /* ---------- 初期モードの反映（DOM 参照の準備後に実行） ---------- */
   applyMode(readInitialMode(), { updateUrl: false });
+
+  /* ---------- プロフィール写真 ---------- */
+  // 画像が用意されている場合だけ 2カラムのヒーローに切り替える
+  var heroFigure = document.querySelector('.hero__media');
+  var heroImg = heroFigure ? heroFigure.querySelector('img') : null;
+  if (heroImg) {
+    var showPhoto = function () { document.querySelector('.hero').classList.add('has-photo'); };
+    if (heroImg.complete) {
+      if (heroImg.naturalWidth > 0) showPhoto();
+    } else {
+      heroImg.addEventListener('load', showPhoto);
+    }
+  }
 
   /* ---------- 5. 西暦 ---------- */
   var year = document.getElementById('year');

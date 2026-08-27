@@ -1,5 +1,4 @@
+# robots.txt はドメイン直下（https://trunknode.jp/robots.txt）に置いたものだけが有効です。
+# サブフォルダ公開の場合、このファイルの内容は本体側の robots.txt に統合してください。
 User-agent: *
 Allow: /
-
-# ▼要差し替え: 公開ドメインに変更してください
-Sitemap: https://example.com/sitemap.xml
