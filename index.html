@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ja" data-mode="career">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- ▼要差し替え: 氏名・サイトURL・説明文 -->
+<title>氏名未設定 | Portfolio</title>
+<meta name="description" content="愛知工業大学 経営学部 経営情報システム専攻。TrunkNode 代表／掛川MusicNest 代表。AIを活用した開発を軸に、経営の視点とプログラミングの両輪で地域と事業の課題を形にしています。">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1116" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://example.com/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="氏名未設定 | Portfolio">
+<meta property="og:description" content="経営の視点とプログラミングの両輪で、地域と事業の課題を形にしています。">
+<meta property="og:url" content="https://example.com/">
+<meta property="og:image" content="https://example.com/assets/img/ogp.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "氏名未設定",
+  "url": "https://example.com/",
+  "jobTitle": "学生 / TrunkNode 代表",
+  "affiliation": { "@type": "CollegeOrUniversity", "name": "愛知工業大学 経営学部 経営学科 経営情報システム専攻" },
+  "knowsAbout": ["Web制作", "経営情報システム", "アプリ開発", "AI活用開発", "情報セキュリティ", "地域活性化"]
+}
+</script>
+<script>
+// 描画前に表示モードを確定させ、切り替わりのちらつきを防ぐ
+(function () {
+  try {
+    var m = new URLSearchParams(location.search).get('mode');
+    if (m !== 'career' && m !== 'business') m = localStorage.getItem('portfolio-mode');
+    if (m === 'career' || m === 'business') document.documentElement.setAttribute('data-mode', m);
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">本文へスキップ</a>
+
+<header class="header" id="header">
+  <div class="header__inner container">
+    <a class="logo" href="#top">
+      <span class="logo__mark" aria-hidden="true"></span>
+      <!-- ▼要差し替え: 氏名（ローマ字） -->
+      <span class="logo__text">Portfolio</span>
+    </a>
+
+    <nav class="nav" id="nav" aria-label="メインナビゲーション">
+      <ul class="nav__list">
+        <li class="nav__item nav__item--about"><a href="#about">About</a></li>
+        <li class="nav__item nav__item--services"><a href="#services">Services</a></li>
+        <li class="nav__item nav__item--strength"><a href="#strength">Strength</a></li>
+        <li class="nav__item nav__item--now"><a href="#now">Now</a></li>
+        <li class="nav__item nav__item--works"><a href="#works">Works</a></li>
+        <li class="nav__item nav__item--skills"><a href="#skills">Skills</a></li>
+        <li class="nav__item nav__item--history"><a href="#history">History</a></li>
+        <li class="nav__item nav__item--contact"><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="switch" role="group" aria-label="表示モードの切り替え">
+      <span class="switch__thumb" aria-hidden="true"></span>
+      <button type="button" class="switch__btn" data-mode-btn="career" aria-pressed="true">
+        <span class="switch__long">就活・採用の方へ</span><span class="switch__short">就活</span>
+      </button>
+      <button type="button" class="switch__btn" data-mode-btn="business" aria-pressed="false">
+        <span class="switch__long">お仕事のご相談</span><span class="switch__short">事業</span>
+      </button>
+    </div>
+
+    <button type="button" class="burger" id="burger" aria-expanded="false" aria-controls="nav" aria-label="メニューを開く">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="container hero__inner">
+      <p class="hero__eyebrow">
+        <span class="dot" aria-hidden="true"></span>
+        <span data-mode-text="career">愛知工業大学 経営学部 3年 ／ 静岡県掛川市出身</span>
+        <span data-mode-text="business">TrunkNode 代表 ／ Web制作・アプリ開発</span>
+      </p>
+
+      <h1 class="hero__title">
+        <span data-mode-text="career">経営を学び、<br>コードで地域を動かす。</span>
+        <span data-mode-text="business">つくって終わりに<br>しない、Web制作。</span>
+      </h1>
+
+      <p class="hero__lead">
+        <span data-mode-text="career">
+          愛知工業大学で経営情報システムを専攻し、実践的な経営の知識とプログラミングを学んでいます。
+          高校の情報科教諭を目指して教職課程も履修中。学んだことは、地元・掛川での活動でそのまま形にしています。
+        </span>
+        <span data-mode-text="business">
+          個人事業「TrunkNode」として、Webサイト制作からアプリ開発、運用改善までを一貫して担当します。
+          自ら地域イベントを運営してきた経験から、「誰がどう使うか」を起点に設計します。
+        </span>
+      </p>
+
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="#contact">
+          <span data-mode-text="career">連絡する</span>
+          <span data-mode-text="business">お仕事のご相談</span>
+        </a>
+        <a class="btn btn--ghost" href="#works">制作物を見る</a>
+      </div>
+
+      <ul class="hero__facts">
+        <li><strong>3</strong><span>現在進行中の活動</span></li>
+        <li class="only-career"><strong>2</strong><span>年間の生徒会長経験</span></li>
+        <li class="only-business"><strong>1</strong><span>窓口で企画から運用まで</span></li>
+        <li><strong>2</strong><span>代表を務める団体</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section section--tint" id="about">
+    <div class="container">
+      <p class="section__eyebrow">About</p>
+      <h2 class="section__title">経営とITの、あいだにいる。</h2>
+
+      <div class="about">
+        <div class="about__body">
+          <p>
+            愛知工業大学 経営学部 経営学科 <strong>経営情報システム専攻</strong>に在籍しています。
+            「経営の意思決定」と「それを支える情報システム」の両方を学べる環境で、
+            数字で考えることと、手を動かしてつくることを同時に鍛えています。
+          </p>
+          <p class="only-career">
+            並行して、<strong>高等学校 情報科の教員免許状</strong>を取得するための教職課程を履修中です。
+            「自分がわかる」だけでなく「人に伝わるように説明できる」ことを求められる経験は、
+            チームで開発するときにも、クライアントに提案するときにも効いています。
+          </p>
+          <p class="only-business">
+            大学で学んだ経営の視点があるので、「デザインがきれいなサイト」ではなく
+            「集客・運営コストまで含めて成立するサイト」から逆算して提案できます。
+          </p>
+          <p>
+            開発では<strong>AIを積極的に、そして正しく使う</strong>ことを大事にしています。
+            AIに書かせて終わりにせず、内容を理解したうえで自分の言葉に直す。
+            そのサイクルが、そのまま自分の学習にもなっています。
+          </p>
+        </div>
+
+        <div class="about__cards">
+          <div class="card">
+            <h3 class="card__title">大学で学んでいること</h3>
+            <ul class="list">
+              <li>実践的な経営の知識（マネジメント・会計・マーケティング）</li>
+              <li>情報システムの設計とプログラミング</li>
+              <li>データにもとづく意思決定</li>
+            </ul>
+          </div>
+          <div class="card only-career">
+            <h3 class="card__title">教職課程（情報科）</h3>
+            <p class="card__text">
+              高等学校教諭一種免許状（情報）の取得を目指して履修中。
+              教えることを前提に技術を学び直すことで、理解の解像度を上げています。
+            </p>
+          </div>
+          <div class="card only-business">
+            <h3 class="card__title">対応できる範囲</h3>
+            <p class="card__text">
+              ヒアリング・構成設計・デザイン・実装・公開・その後の運用改善まで、
+              個人事業だからこその窓口ひとつで進行します。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES (事業モード) ============ -->
+  <section class="section" id="services">
+    <div class="container">
+      <p class="section__eyebrow">Services</p>
+      <h2 class="section__title">TrunkNode でできること。</h2>
+      <p class="section__lead">個人事業「TrunkNode」として、Webを軸に幅広くお手伝いしています。</p>
+
+      <div class="grid grid--3">
+        <div class="card card--service">
+          <span class="card__num" aria-hidden="true">01</span>
+          <h3 class="card__title">Webサイト制作</h3>
+          <p class="card__text">
+            団体・イベント・店舗のサイトを、構成設計から公開まで。
+            スマートフォンでの見やすさと、更新のしやすさを重視します。
+          </p>
+          <ul class="tags"><li>HTML / CSS</li><li>JavaScript</li><li>WordPress</li></ul>
+        </div>
+        <div class="card card--service">
+          <span class="card__num" aria-hidden="true">02</span>
+          <h3 class="card__title">アプリ・ツール開発</h3>
+          <p class="card__text">
+            受付アプリなど、現場のオペレーションに合わせた小さな道具をつくります。
+            「エクセルと紙でやっていたこと」を置き換えるのが得意です。
+          </p>
+          <ul class="tags"><li>Android</li><li>業務ツール</li><li>受付システム</li></ul>
+        </div>
+        <div class="card card--service">
+          <span class="card__num" aria-hidden="true">03</span>
+          <h3 class="card__title">イベント運営まわりの支援</h3>
+          <p class="card__text">
+            出店者の取りまとめや当日運営まで、実際に手を動かしてきた経験があります。
+            Webと運営をまとめて相談できるのが強みです。
+          </p>
+          <ul class="tags"><li>出店者管理</li><li>広報</li><li>当日運営</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NOW ============ -->
+  <section class="section section--tint" id="now">
+    <div class="container">
+      <p class="section__eyebrow">Now</p>
+      <h2 class="section__title">いま、携わっていること。</h2>
+      <p class="section__lead">現在進行中の活動です。どれも「地元をおもしろくする」ことに繋がっています。</p>
+
+      <div class="grid grid--3">
+        <article class="card card--now">
+          <p class="card__label">個人事業</p>
+          <h3 class="card__title">TrunkNode <span class="card__role">代表</span></h3>
+          <p class="card__text">
+            自身の個人事業として立ち上げ。Webページの開発を中心に、
+            制作・運用・改善まで多岐にわたって手がけています。
+          </p>
+          <ul class="tags"><li>Web制作</li><li>受託開発</li><li>運用改善</li></ul>
+        </article>
+
+        <article class="card card--now">
+          <p class="card__label">地域活動</p>
+          <h3 class="card__title">掛川MusicNest <span class="card__role">代表</span></h3>
+          <p class="card__text">
+            地元の音楽シーンを盛り上げるための活動を実施中。
+            団体のHPや、イベント用の受付アプリなども自ら開発しています。
+          </p>
+          <ul class="tags"><li>HP制作</li><li>受付アプリ</li><li>企画・運営</li></ul>
+        </article>
+
+        <article class="card card--now">
+          <p class="card__label">実行委員会</p>
+          <h3 class="card__title">掛川バンドフェスティバル <span class="card__role">実行委員</span></h3>
+          <p class="card__text">
+            実行委員会にて、Webページ制作と出店者の取りまとめを担当。
+            対外的な調整と情報発信の両方を回しています。
+          </p>
+          <ul class="tags"><li>Webページ制作</li><li>出店者管理</li><li>渉外</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WORKS ============ -->
+  <section class="section" id="works">
+    <div class="container">
+      <p class="section__eyebrow">Works</p>
+      <h2 class="section__title">つくったもの。</h2>
+      <p class="section__lead">授業や個人開発でつくったプロダクトです。</p>
+
+      <div class="grid grid--2">
+        <article class="card card--work">
+          <div class="work__thumb work__thumb--a" aria-hidden="true"><span>SNS</span></div>
+          <div class="work__body">
+            <p class="card__label">Android アプリ ／ 個人開発</p>
+            <h3 class="card__title">SNS依存予防アプリ</h3>
+            <p class="card__text">
+              SNSを使いすぎてしまう自分自身の課題から出発した、利用習慣を見直すためのアプリ。
+              現在はローカル版のみの実装です。
+            </p>
+            <ul class="tags"><li>Android</li><li>ローカル版</li><li>習慣改善</li></ul>
+          </div>
+        </article>
+
+        <article class="card card--work">
+          <div class="work__thumb work__thumb--b" aria-hidden="true"><span>Alarm</span></div>
+          <div class="work__body">
+            <p class="card__label">Android アプリ ／ 個人開発</p>
+            <h3 class="card__title">アラームアプリ</h3>
+            <p class="card__text">
+              「起きられない」を解決するために自作したアラームアプリ。
+              こちらもローカル版のみの実装で、UI と通知まわりの学習を兼ねています。
+            </p>
+            <ul class="tags"><li>Android</li><li>ローカル版</li><li>通知</li></ul>
+          </div>
+        </article>
+
+        <article class="card card--work">
+          <div class="work__thumb work__thumb--c" aria-hidden="true"><span>Web</span></div>
+          <div class="work__body">
+            <p class="card__label">Webサイト ／ 掛川バンドフェスティバル</p>
+            <h3 class="card__title">イベント公式Webページ</h3>
+            <p class="card__text">
+              実行委員会のメンバーとして制作を担当。出演者・出店者情報や来場者向けの案内を掲載しています。
+            </p>
+            <ul class="tags"><li>HTML / CSS</li><li>レスポンシブ</li><li>情報設計</li></ul>
+          </div>
+        </article>
+
+        <article class="card card--work">
+          <div class="work__thumb work__thumb--d" aria-hidden="true"><span>Nest</span></div>
+          <div class="work__body">
+            <p class="card__label">Webサイト＋アプリ ／ 掛川MusicNest</p>
+            <h3 class="card__title">掛川MusicNest HP・受付アプリ</h3>
+            <p class="card__text">
+              団体の顔となるHPと、イベント当日の受付を効率化するアプリを開発。
+              運営する側の視点から仕様を決められるのが強みです。
+            </p>
+            <ul class="tags"><li>Web</li><li>受付システム</li><li>運用設計</li></ul>
+          </div>
+        </article>
+      </div>
+
+      <p class="note">※ 各制作物のスクリーンショット・公開URLは準備中です。</p>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section class="section section--tint" id="skills">
+    <div class="container">
+      <p class="section__eyebrow">Skills</p>
+      <h2 class="section__title">できること、学んでいること。</h2>
+      <p class="section__lead">背伸びせず、いまの実力をそのまま書いています。</p>
+
+      <div class="grid grid--3">
+        <div class="card">
+          <h3 class="card__title">言語・技術</h3>
+          <div class="lv">
+            <p class="lv__label">書ける（制作で使用）</p>
+            <ul class="tags tags--lg"><li>Python</li><li>HTML</li><li>CSS</li></ul>
+          </div>
+          <div class="lv">
+            <p class="lv__label">読んで理解できる</p>
+            <ul class="tags tags--lg tags--sub"><li>PHP</li><li>JavaScript</li></ul>
+          </div>
+          <div class="lv">
+            <p class="lv__label">制作環境</p>
+            <ul class="tags tags--lg tags--sub"><li>WordPress</li><li>Android アプリ開発</li></ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card__title">資格</h3>
+          <div class="lv">
+            <p class="lv__label">取得済み</p>
+            <ul class="list list--check">
+              <li>ITパスポート</li>
+            </ul>
+          </div>
+          <div class="lv">
+            <p class="lv__label">学習中</p>
+            <ul class="list list--study">
+              <li>基本情報技術者試験</li>
+              <li>情報セキュリティマネジメント試験</li>
+              <li>行政書士</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card__title">関心のある領域</h3>
+          <ul class="tags tags--lg">
+            <li>情報セキュリティ</li><li>AI活用</li><li>経営情報システム</li><li>地域 × IT</li>
+          </ul>
+          <p class="card__text" style="margin-top:16px">
+            とくに<strong>情報セキュリティ</strong>に関心があり、
+            情報セキュリティマネジメント試験の学習を通して体系的に知識を固めているところです。
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 class="card__title">経営・ビジネス</h3>
+          <ul class="tags tags--lg">
+            <li>経営情報システム</li><li>マーケティング</li><li>データ分析</li><li>企画立案</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 class="card__title">組織・コミュニケーション</h3>
+          <ul class="tags tags--lg">
+            <li>組織運営</li><li>渉外・調整</li><li>イベント運営</li><li>プレゼンテーション</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 class="card__title">学びのスタイル</h3>
+          <p class="card__text">
+            扱ったことのない言語でも、調べながら手を動かして学習し、知識として定着させることができます。
+            理解のスピードには自信があります。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STRENGTH ============ -->
+  <section class="section" id="strength">
+    <div class="container">
+      <p class="section__eyebrow">Strength</p>
+      <h2 class="section__title">AIを「正しく」使って、つくる。</h2>
+      <p class="section__lead">
+        AIを活用した開発が得意です。これまでのアプリやWebページも、AIをうまく使いながら形にしてきました。
+      </p>
+
+      <div class="grid grid--3">
+        <div class="card">
+          <h3 class="card__title">AIを活用した開発</h3>
+          <p class="card__text">
+            生成AIを「答えをもらう道具」ではなく「設計を詰めるための相棒」として使います。
+            出てきたコードをそのまま貼るのではなく、読んで理解し、意図に合うように直したうえで組み込みます。
+            結果として、ひとりでも短期間で動くものを届けられます。
+          </p>
+        </div>
+        <div class="card">
+          <h3 class="card__title">理解の速さ・自走力</h3>
+          <p class="card__text">
+            わからないことも、少し調べれば理解して前に進めます。
+            はじめて触る言語や環境でも、学習しながら使い、そのまま知識として定着させてきました。
+          </p>
+        </div>
+        <div class="card only-career">
+          <h3 class="card__title">これから伸ばすところ</h3>
+          <p class="card__text">
+            AIに頼らずゼロから書き切るには、まだ時間がかかります。
+            経験量が足りていないことは自覚しているので、資格学習と個人開発の両方で、
+            自分の手で書ける範囲を広げているところです。
+          </p>
+        </div>
+        <div class="card only-business">
+          <h3 class="card__title">小さく早く、確かめながら</h3>
+          <p class="card__text">
+            まず動くものを早めにお見せして、実際に触っていただきながら調整していく進め方を取ります。
+            認識のズレが小さいうちに直せるので、手戻りが少なく済みます。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HISTORY ============ -->
+  <section class="section" id="history">
+    <div class="container">
+      <p class="section__eyebrow">History</p>
+      <h2 class="section__title">これまでのこと。</h2>
+
+      <ol class="timeline">
+        <li class="tl">
+          <span class="tl__year">20XX</span>
+          <div class="tl__body">
+            <h3 class="tl__title">静岡県立掛川東高等学校 生徒会長</h3>
+            <p class="tl__text">
+              2年間にわたり生徒会長を務め、学校行事の企画・運営と、生徒と教職員のあいだの調整を担当。
+              「人を巻き込んで動かす」ことの原体験になりました。
+            </p>
+          </div>
+        </li>
+        <li class="tl">
+          <span class="tl__year">20XX</span>
+          <div class="tl__body">
+            <h3 class="tl__title">掛川まちづくりらぼ</h3>
+            <p class="tl__text">
+              地域の課題に高校生・若者の立場から関わるプロジェクトに参加。
+              地元・掛川への関わり方を考えるきっかけになりました。
+            </p>
+          </div>
+        </li>
+        <li class="tl">
+          <span class="tl__year">20XX</span>
+          <div class="tl__body">
+            <h3 class="tl__title">静岡県グローバル人材育成事業<br class="sp-br">ヤマハ発動機インドネシア研修</h3>
+            <p class="tl__text">
+              静岡県の事業に選抜され、ヤマハ発動機のインドネシア拠点を訪問。
+              日本のものづくりが海外の現場でどう機能しているかを、実際に見て学びました。
+            </p>
+          </div>
+        </li>
+        <li class="tl">
+          <span class="tl__year">20XX</span>
+          <div class="tl__body">
+            <h3 class="tl__title">愛知工業大学 経営学部 経営学科<br class="sp-br">経営情報システム専攻 入学</h3>
+            <p class="tl__text">
+              経営とITを横断して学べる環境へ。教職課程（情報科）も並行して履修しています。
+            </p>
+          </div>
+        </li>
+        <li class="tl tl--current">
+          <span class="tl__year">現在</span>
+          <div class="tl__body">
+            <h3 class="tl__title">TrunkNode / 掛川MusicNest / 掛川バンドフェスティバル</h3>
+            <p class="tl__text">
+              個人事業と地域活動を並行して進行中。学んだことを、そのまま地元で試しています。
+            </p>
+          </div>
+        </li>
+      </ol>
+      <p class="note">※ 年次は追って正確な情報に差し替えます。</p>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section section--contact section--tint" id="contact">
+    <div class="container">
+      <p class="section__eyebrow">Contact</p>
+      <h2 class="section__title">
+        <span data-mode-text="career">お話しできることを、<br class="sp-br">楽しみにしています。</span>
+        <span data-mode-text="business">まずは、お気軽にご相談ください。</span>
+      </h2>
+      <p class="section__lead">
+        <span data-mode-text="career">
+          インターン・選考のご連絡、活動に関するお問い合わせなど、お気軽にどうぞ。
+        </span>
+        <span data-mode-text="business">
+          制作のご依頼、お見積り、「こんなことできる？」というご相談まで承ります。
+        </span>
+      </p>
+
+      <div class="contact">
+        <!-- ▼要差し替え: メールアドレス -->
+        <a class="btn btn--primary btn--lg" href="mailto:example@example.com">メールで連絡する</a>
+        <ul class="contact__links">
+          <!-- ▼要差し替え: 各SNS・サービスのURL -->
+          <li><a href="#" rel="me">X (Twitter)</a></li>
+          <li><a href="#" rel="me">Instagram</a></li>
+          <li><a href="#" rel="me">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <p class="footer__name">氏名未設定</p>
+    <p class="footer__copy">&copy; <span id="year">2026</span> TrunkNode. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>

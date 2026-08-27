@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# ▼要差し替え: 公開ドメインに変更してください
+Sitemap: https://example.com/sitemap.xml
