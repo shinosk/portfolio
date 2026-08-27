@@ -1,10 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Portfolio">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#2c5cd8"/>
-      <stop offset="1" stop-color="#7a4fe0"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="16" fill="url(#g)"/>
-  <path d="M20 42V22h5.6l6.4 12.2L38.4 22H44v20h-5.2V31.4L33.6 42h-3.2L25.2 31.4V42z" fill="#fff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Shimba Osuke">
+  <rect width="64" height="64" fill="#f5f4f0"/>
+  <rect x="4" y="4" width="56" height="56" fill="none" stroke="#1b1a17" stroke-width="2"/>
+  <rect x="15" y="19" width="34" height="5" fill="#a83e28"/>
+  <rect x="15" y="30" width="34" height="5" fill="#1b1a17"/>
+  <rect x="15" y="41" width="20" height="5" fill="#1b1a17"/>
 </svg>

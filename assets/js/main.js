@@ -1,10 +1,11 @@
 /**
- * Portfolio – main script
+ * 榛葉多翼 Portfolio
  *  1. 表示モード切替（就活 / 事業）
- *  2. モバイルメニュー
- *  3. ヘッダーの影 & スクロールスパイ
- *  4. スクロール連動フェードイン
- *  5. 西暦の自動更新
+ *  2. セクション番号の採番
+ *  3. 任意画像（置かれていれば表示する画像）
+ *  4. モバイルメニュー
+ *  5. スクロールスパイ
+ *  6. フェードイン / 西暦
  */
 (function () {
   'use strict';
@@ -12,6 +13,28 @@
   var root = document.documentElement;
   var MODES = ['career', 'business'];
   var STORAGE_KEY = 'portfolio-mode';
+
+  /* ---------- 2. セクション番号 ---------- */
+  /**
+   * 画面上の並び順にあわせて 01, 02… を振り直す。
+   * モードで order と表示・非表示が変わるため、DOM 順ではなく毎回計算する。
+   */
+  function numberSections() {
+    var visible = Array.prototype.slice.call(document.querySelectorAll('main > section'))
+      .filter(function (el) { return getComputedStyle(el).display !== 'none'; })
+      .sort(function (a, b) {
+        return (parseInt(getComputedStyle(a).order, 10) || 0) - (parseInt(getComputedStyle(b).order, 10) || 0);
+      });
+
+    var n = 0;
+    visible.forEach(function (el, i) {
+      el.classList.toggle('is-first', i === 1); // ヒーローの次＝本文の1つ目
+      var num = el.querySelector('.section__num');
+      if (!num) return;
+      n += 1;
+      num.textContent = (n < 10 ? '0' : '') + n;
+    });
+  }
 
   /* ---------- 1. 表示モード切替 ---------- */
   var modeButtons = Array.prototype.slice.call(document.querySelectorAll('[data-mode-btn]'));
@@ -44,14 +67,7 @@
       history.replaceState(null, '', url.toString().replace(/\?$/, ''));
     }
 
-    if (opts.animate) {
-      document.body.classList.remove('mode-fade');
-      void document.body.offsetWidth; // reflow を挟んでアニメーションを再生
-      document.body.classList.add('mode-fade');
-    }
-
-    // 並び替えでレイアウトが変わるため、表示中の要素を再判定する
-    paintSections();
+    numberSections();
     revealVisible();
     updateActiveNav();
   }
@@ -60,28 +76,32 @@
     btn.addEventListener('click', function () {
       var next = btn.dataset.modeBtn;
       if (root.getAttribute('data-mode') === next) return;
-      applyMode(next, { updateUrl: true, animate: true });
+      applyMode(next, { updateUrl: true });
     });
   });
 
-  /**
-   * 背景の濃淡を「画面上の並び順」で交互に付け替える。
-   * モードによってセクションの order と表示・非表示が変わるため、
-   * HTML 側で固定せず、都度計算する。
-   */
-  function paintSections() {
-    var visible = Array.prototype.slice.call(document.querySelectorAll('main > section'))
-      .filter(function (el) { return getComputedStyle(el).display !== 'none'; })
-      .sort(function (a, b) {
-        return (parseInt(getComputedStyle(a).order, 10) || 0) - (parseInt(getComputedStyle(b).order, 10) || 0);
-      });
+  /* ---------- 3. 任意画像 ---------- */
+  // data-optional の画像は、ファイルが存在するときだけ枠ごと表示する。
+  // 未設置でもレイアウトが崩れないので、写真は後から差し込める。
+  Array.prototype.slice.call(document.querySelectorAll('img[data-optional]')).forEach(function (img) {
+    var frame = img.closest('.opt-img');
+    if (!frame) return;
 
-    visible.forEach(function (el, i) {
-      el.classList.toggle('section--tint', i % 2 === 1);
-    });
-  }
+    var show = function () {
+      frame.classList.add('is-shown');
+      if (frame.classList.contains('hero__media')) {
+        document.querySelector('.hero').classList.add('has-photo');
+      }
+    };
 
-  /* ---------- 2. モバイルメニュー ---------- */
+    if (img.complete) {
+      if (img.naturalWidth > 0) show();
+    } else {
+      img.addEventListener('load', show);
+    }
+  });
+
+  /* ---------- 4. モバイルメニュー ---------- */
   var burger = document.getElementById('burger');
   var nav = document.getElementById('nav');
 
@@ -106,8 +126,7 @@
     });
   }
 
-  /* ---------- 3. ヘッダー & スクロールスパイ ---------- */
-  var header = document.getElementById('header');
+  /* ---------- 5. スクロールスパイ ---------- */
   var navItems = Array.prototype.slice.call(document.querySelectorAll('.nav__item'));
   var sections = navItems
     .map(function (item) {
@@ -132,35 +151,27 @@
     });
   }
 
-  function onScroll() {
-    if (header) header.classList.toggle('is-stuck', window.scrollY > 8);
-    updateActiveNav();
-  }
-
   var ticking = false;
   window.addEventListener('scroll', function () {
     if (ticking) return;
     ticking = true;
     window.requestAnimationFrame(function () {
-      onScroll();
+      updateActiveNav();
       ticking = false;
     });
   }, { passive: true });
-
   window.addEventListener('resize', updateActiveNav, { passive: true });
-  onScroll();
 
-  /* ---------- 4. フェードイン ---------- */
+  /* ---------- 6. フェードイン ---------- */
   var revealTargets = Array.prototype.slice.call(
-    document.querySelectorAll('.section__eyebrow, .section__title, .section__lead, .card, .tl, .contact, .contact__sites, .note')
+    document.querySelectorAll('.section__head, .prose, .row, .work, .tl, .note')
   );
   revealTargets.forEach(function (el) { el.classList.add('reveal'); });
 
   function revealVisible() {
-    // 画面内にすでにある要素は即座に表示（モード切替直後のちらつき防止）
     revealTargets.forEach(function (el) {
       var rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+      if (rect.top < window.innerHeight * 0.94 && rect.bottom > 0) {
         el.classList.add('is-visible');
       }
     });
@@ -174,32 +185,17 @@
           io.unobserve(entry.target);
         }
       });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+    }, { rootMargin: '0px 0px -6% 0px', threshold: 0.04 });
 
     revealTargets.forEach(function (el) { io.observe(el); });
   } else {
     revealTargets.forEach(function (el) { el.classList.add('is-visible'); });
   }
 
-  revealVisible();
-
-  /* ---------- 初期モードの反映（DOM 参照の準備後に実行） ---------- */
+  /* ---------- 初期化 ---------- */
   applyMode(readInitialMode(), { updateUrl: false });
+  updateActiveNav();
 
-  /* ---------- プロフィール写真 ---------- */
-  // 画像が用意されている場合だけ 2カラムのヒーローに切り替える
-  var heroFigure = document.querySelector('.hero__media');
-  var heroImg = heroFigure ? heroFigure.querySelector('img') : null;
-  if (heroImg) {
-    var showPhoto = function () { document.querySelector('.hero').classList.add('has-photo'); };
-    if (heroImg.complete) {
-      if (heroImg.naturalWidth > 0) showPhoto();
-    } else {
-      heroImg.addEventListener('load', showPhoto);
-    }
-  }
-
-  /* ---------- 5. 西暦 ---------- */
   var year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
 })();
