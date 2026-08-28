@@ -1,12 +1,16 @@
 /**
  * デジタル名刺（3D）
  *
- * assets/card/front.pdf / back.pdf を PDF.js で描画してテクスチャにし、
+ * assets/card/front.webp / back.webp をテクスチャにして、
  * Three.js で厚みのある一枚の名刺として表示する。
  *
- *  - PDF が置かれていない場合はセクションごと非表示にする
- *  - 重いライブラリは、名刺が画面に入ってから読み込む
- *  - WebGL が使えない環境ではセクションを隠し、他の表示には影響させない
+ * 画像は名刺の PDF から tools/card-to-webp.py で書き出したもの。
+ * PDF をブラウザ上で直接描画する方式も試したが、PDF.js が名刺に使われている
+ * CFF フォントの文字幅を正しく扱えず欧文が潰れたため、画像方式にしている。
+ *
+ *  - 画像が置かれていない場合はセクションごと表示しない
+ *  - Three.js は、名刺が画面に近づいてから読み込む
+ *  - WebGL が使えない環境では、両面を並べた平面表示に切り替える
  */
 
 const el = document.getElementById('card3d');
@@ -15,14 +19,13 @@ const section = document.getElementById('card');
 /** 名刺の実寸（日本の標準サイズ 91×55mm）。1 unit = 10mm として扱う */
 const CARD_W = 9.1;
 const CARD_H = 5.5;
-const CARD_D = 0.045;          // 紙の厚み 0.45mm 相当
-const TEXTURE_WIDTH = 2048;    // PDF を描き出す横幅（px）
+const CARD_D = 0.045;   // 紙の厚み 0.45mm 相当
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /**
  * 名刺セクションは CSS で最初から隠してある。
- * PDF の存在が確認できたときだけ表示し、番号とナビを振り直させる。
+ * 画像が揃っていることを確認できたときだけ表示し、番号とナビを振り直させる。
  * こうしておくと、このスクリプトが動かない環境でも中途半端な枠が残らない。
  */
 function enableSection() {
@@ -39,18 +42,15 @@ function disableSection(reason) {
   if (reason) console.info('[card] 表示しません:', reason);
 }
 
-/**
- * PDF を読み込む。名刺は数十KB程度なので、置かれているかの確認を兼ねて
- * 先に取得しておく（HEAD が正しく返らないサーバーでも確実に判定できる）。
- */
-async function fetchPdf(url) {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) return null;
-    return await res.arrayBuffer();
-  } catch (e) {
-    return null;
-  }
+/** 画像を読み込む。置かれていなければ null を返す */
+function loadImage(url) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.decoding = 'async';
+    img.onload = () => resolve(img.naturalWidth > 0 ? img : null);
+    img.onerror = () => resolve(null);
+    img.src = url;
+  });
 }
 
 function hasWebGL() {
@@ -67,93 +67,66 @@ function hasWebGL() {
 async function boot() {
   if (!el || !section) return;
 
-  const frontUrl = el.dataset.front;
-  const backUrl = el.dataset.back;
+  const [front, back] = await Promise.all([
+    loadImage(el.dataset.front),
+    loadImage(el.dataset.back),
+  ]);
 
-  const [frontData, backData] = await Promise.all([fetchPdf(frontUrl), fetchPdf(backUrl)]);
-  if (!frontData || !backData) return disableSection('名刺の PDF が見つかりません');
+  if (!front || !back) return disableSection('名刺の画像が見つかりません');
 
   enableSection();
 
-  // 重いライブラリはセクションが近づいてから読み込む。
+  // Three.js はセクションが近づいてから読み込む
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         io.disconnect();
-        start(frontData, backData);
+        start(front, back);
       });
-    }, { rootMargin: '400px 0px' });
+    }, { rootMargin: '600px 0px' });
     io.observe(el);
   } else {
-    start(frontData, backData);
+    start(front, back);
   }
 }
 
-async function start(frontData, backData) {
+async function start(front, back) {
   const statusEl = el.querySelector('.card3d__status');
   const canvas = el.querySelector('.card3d__canvas');
 
   try {
-    const pdfjs = await import('../vendor/pdf.min.mjs');
-
-    pdfjs.GlobalWorkerOptions.workerSrc =
-      new URL('../vendor/pdf.worker.min.mjs', import.meta.url).href;
-
-    const [frontCanvas, backCanvas] = await Promise.all([
-      renderPdf(pdfjs, frontData),
-      renderPdf(pdfjs, backData),
-    ]);
-
     if (hasWebGL()) {
       const THREE = await import('../vendor/three.module.min.js');
-      buildScene(THREE, canvas, frontCanvas, backCanvas);
+      buildScene(THREE, canvas, front, back);
       el.querySelectorAll('.card3d__btn').forEach((b) => { b.disabled = false; });
     } else {
-      // 3D が使えない環境では、両面を並べた平面表示にする
-      showFlat(canvas, frontCanvas, backCanvas);
+      showFlat(canvas, front, back);
     }
 
-    statusEl.remove();
+    if (statusEl) statusEl.remove();
     el.classList.add('is-ready');
   } catch (err) {
-    console.error('[card] 読み込みに失敗しました', err);
-    disableSection('読み込みに失敗しました');
+    // 画像は読めているので、黙って消さずに平面表示へ落とす
+    console.error('[card] 3D表示に失敗しました', err);
+    showFlat(canvas, front, back);
+    if (statusEl) statusEl.remove();
+    el.classList.add('is-ready');
   }
 }
 
-/** PDF の1ページ目を canvas に描き出す */
-async function renderPdf(pdfjs, data) {
-  // pdf.js は渡した ArrayBuffer を破棄するので、複製を渡す
-  const doc = await pdfjs.getDocument({ data: data.slice(0) }).promise;
-  const page = await doc.getPage(1);
-
-  const base = page.getViewport({ scale: 1 });
-  const viewport = page.getViewport({ scale: TEXTURE_WIDTH / base.width });
-
-  const canvas = document.createElement('canvas');
-  canvas.width = Math.round(viewport.width);
-  canvas.height = Math.round(viewport.height);
-
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#ffffff';            // 透過部分は紙の白で埋める
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  await page.render({ canvas, canvasContext: ctx, viewport }).promise;
-  return canvas;
-}
-
-/** 3D が使えないときのフォールバック。両面を画像として並べる */
-function showFlat(canvas, frontCanvas, backCanvas) {
+/** 3D が使えないときのフォールバック。両面を並べて表示する */
+function showFlat(canvas, front, back) {
   const stage = canvas.parentElement;
+  if (!stage || stage.querySelector('.card3d__flat')) return;
   canvas.remove();
 
   const wrap = document.createElement('div');
   wrap.className = 'card3d__flat';
-  [frontCanvas, backCanvas].forEach((src, i) => {
+  [[front, '名刺の表面'], [back, '名刺の裏面']].forEach(([src, alt]) => {
     const img = new Image();
-    img.src = src.toDataURL('image/png');
-    img.alt = i === 0 ? '名刺の表面' : '名刺の裏面';
+    img.src = src.src;
+    img.alt = alt;
     wrap.appendChild(img);
   });
   stage.appendChild(wrap);
@@ -170,14 +143,14 @@ function showFlat(canvas, frontCanvas, backCanvas) {
 
 /* ---------------------------------------------------------------- */
 
-function buildScene(THREE, canvas, frontCanvas, backCanvas) {
+function buildScene(THREE, canvas, frontImg, backImg) {
   const stage = canvas.parentElement;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
 
   const scene = new THREE.Scene();
   const FOV = 30;
@@ -186,34 +159,32 @@ function buildScene(THREE, canvas, frontCanvas, backCanvas) {
 
   /* --- 名刺本体 --- */
   const maxAniso = renderer.capabilities.getMaxAnisotropy();
-  const toTexture = (src) => {
-    const tex = new THREE.CanvasTexture(src);
+  const toTexture = (img) => {
+    const tex = new THREE.Texture(img);
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = maxAniso;
-    tex.generateMipmaps = true;
     tex.minFilter = THREE.LinearMipmapLinearFilter;
+    tex.needsUpdate = true;
     return tex;
   };
 
   // 印刷面はマットな紙。少しだけ光沢を残して、光の当たり方が分かるようにする
-  const face = (tex) => new THREE.MeshStandardMaterial({
-    map: tex, roughness: 0.7, metalness: 0.0,
+  const face = (img) => new THREE.MeshStandardMaterial({
+    map: toTexture(img), roughness: 0.7, metalness: 0.0,
   });
   // 小口は印刷面より少しだけ沈ませ、紙の断面に見えるようにする
   const edge = new THREE.MeshStandardMaterial({
     color: 0xe6e2d8, roughness: 0.95, metalness: 0.0,
   });
 
-  // 用紙のアスペクト比は PDF 側に合わせる（横長・縦長どちらでも破綻させない）
-  const ratio = frontCanvas.height / frontCanvas.width;
+  // 用紙のアスペクト比は画像に合わせる（変型サイズでも破綻させない）
   const w = CARD_W;
-  const h = +(CARD_W * ratio).toFixed(4) || CARD_H;
+  const h = +(CARD_W * (frontImg.naturalHeight / frontImg.naturalWidth)).toFixed(4) || CARD_H;
 
-  const geometry = new THREE.BoxGeometry(w, h, CARD_D);
-  const card = new THREE.Mesh(geometry, [
-    edge, edge, edge, edge,               // 側面（紙の小口）
-    face(toTexture(frontCanvas)),         // 表
-    face(toTexture(backCanvas)),          // 裏
+  const card = new THREE.Mesh(new THREE.BoxGeometry(w, h, CARD_D), [
+    edge, edge, edge, edge,   // 側面（紙の小口）
+    face(frontImg),           // 表
+    face(backImg),            // 裏
   ]);
   card.castShadow = true;
   scene.add(card);
@@ -256,7 +227,7 @@ function buildScene(THREE, canvas, frontCanvas, backCanvas) {
     dragging: false,
     lastX: 0, lastY: 0,
     idleAt: performance.now(),
-    restY: null,          // 待機中に基準とする向き
+    restY: null,                   // 待機中に基準とする向き
   };
 
   /** 操作されたら待機アニメーションをリセットする */
@@ -268,30 +239,27 @@ function buildScene(THREE, canvas, frontCanvas, backCanvas) {
   const MAX_TILT = 0.85;
   const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
-  function pointerDown(e) {
+  canvas.addEventListener('pointerdown', (e) => {
     state.dragging = true;
     state.lastX = e.clientX;
     state.lastY = e.clientY;
     canvas.setPointerCapture(e.pointerId);
-  }
-  function pointerMove(e) {
+  });
+  canvas.addEventListener('pointermove', (e) => {
     if (!state.dragging) return;
     state.targetY += (e.clientX - state.lastX) * 0.011;
     state.targetX = clamp(state.targetX + (e.clientY - state.lastY) * 0.008, -MAX_TILT, MAX_TILT);
     state.lastX = e.clientX;
     state.lastY = e.clientY;
     touched();
-  }
-  function pointerUp(e) {
+  });
+  const release = (e) => {
     state.dragging = false;
     touched();
     if (canvas.hasPointerCapture?.(e.pointerId)) canvas.releasePointerCapture(e.pointerId);
-  }
-
-  canvas.addEventListener('pointerdown', pointerDown);
-  canvas.addEventListener('pointermove', pointerMove);
-  canvas.addEventListener('pointerup', pointerUp);
-  canvas.addEventListener('pointercancel', pointerUp);
+  };
+  canvas.addEventListener('pointerup', release);
+  canvas.addEventListener('pointercancel', release);
 
   el.querySelector('[data-card-flip]').addEventListener('click', () => {
     state.targetY += Math.PI;
@@ -335,6 +303,7 @@ function buildScene(THREE, canvas, frontCanvas, backCanvas) {
       state.targetY = state.restY + Math.sin(t) * 0.3 * ramp;
       state.targetX = -0.13 + Math.sin(t * 0.62) * 0.06 * ramp;
     }
+
     const ease = reduceMotion ? 1 : 0.09;
     state.rotX += (state.targetX - state.rotX) * ease;
     state.rotY += (state.targetY - state.rotY) * ease;

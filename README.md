@@ -21,16 +21,17 @@ URL パラメータでも指定できるので、**営業用に `?mode=business`
 
 ### デジタル名刺（3D）
 
-`assets/card/front.pdf` と `back.pdf` を置くと、Card セクションが表示されます。
-PDF を PDF.js でブラウザ上に描画してテクスチャにし、Three.js で厚みのある一枚の名刺として
-表示します。ドラッグで回転、ボタンで裏返しができます。
+`assets/card/front.webp` と `back.webp` を Three.js のテクスチャにして、
+厚みのある一枚の名刺として表示します。ドラッグで回転、ボタンで裏返しができます。
 
-- **PDF を差し替えるだけで更新できます。** 画像への変換作業は不要です。
-- 重いライブラリ（Three.js / PDF.js）は、名刺が画面に近づいてから読み込むので、
-  トップの表示速度には影響しません。
-- PDF が置かれていない場合は、セクションもナビの項目も自動的に消えます。
+- 画像は名刺の PDF から `tools/card-to-webp.py` で書き出します（手順は
+  `assets/card/README.md`）。名刺を刷り直したら、PDF を差し替えてこれを一度走らせるだけです。
+- Three.js は名刺が画面に近づいてから読み込むので、トップの表示速度には影響しません。
+- 画像が置かれていない場合は、セクションもナビの項目も自動的に消えます。
 - WebGL が使えない環境では、両面を並べた平面表示に切り替わります。
-- 置き方の詳細は `assets/card/README.md` にあります。
+
+当初は PDF.js で PDF を直接描画していましたが、名刺に使われているフォントを
+PDF.js が正しく扱えず欧文が潰れたため、画像方式にしています（詳細は `assets/card/README.md`）。
 
 ### そのほか
 
@@ -63,22 +64,21 @@ PDF を PDF.js でブラウザ上に描画してテクスチャにし、Three.js
 ├── index.html          … ページ本体（文言はすべてここ）
 ├── .htaccess           … Xserver 向け設定（gzip・キャッシュ・HTTPS化）
 ├── robots.txt
+├── tools/
+│   └── card-to-webp.py … 名刺PDF → WebP の変換スクリプト
 └── assets/
     ├── css/style.css   … スタイル
     ├── js/
     │   ├── main.js     … モード切替・採番・メニュー・アニメーション
     │   └── card.js     … デジタル名刺（3D）
-    ├── card/           … 名刺の PDF を置く場所
+    ├── card/           … 名刺の画像とPDF
     ├── img/favicon.svg … ファビコン
-    └── vendor/         … Three.js / PDF.js（ビルド不要のまま同梱）
+    └── vendor/         … Three.js（ビルド不要のまま同梱）
 ```
 
-`vendor/` は npm から取得したライブラリをそのまま置いています。
-更新するときは同じファイル名で差し替えてください。
-
-- Three.js `three.module.min.js` + `three.core.min.js`（r185）
-- PDF.js `pdf.min.mjs` + `pdf.worker.min.mjs`（v4.10）  
-  ※ v5以降は一部のブラウザでまだ動かないため、意図して v4 系を使っています。
+`vendor/` は npm から取得した Three.js（r185）をそのまま置いています。
+`three.module.min.js` と `three.core.min.js` の2ファイルで、更新するときは
+同じファイル名で差し替えてください。
 
 ## 公開手順（Xserver / trunknode.jp のサブフォルダ）
 
@@ -89,10 +89,6 @@ PDF を PDF.js でブラウザ上に描画してテクスチャにし、Three.js
    - `assets/`（フォルダごと。`vendor/` と `card/` を含みます）
    - `.htaccess`
 3. `.htaccess` の「HTTPS へのリダイレクト」ブロックのコメント（`#`）を外す。
-
-`.htaccess` には `.mjs` の MIME タイプ指定が入っています。
-これが無いとブラウザが PDF.js をモジュールとして読み込めず、名刺が表示されません。
-`.htaccess` は必ず一緒にアップロードしてください。
 
 > `.htaccess` は先頭がドットのため、FTP クライアントの設定で「隠しファイルを表示」を有効にしてください。
 
@@ -126,8 +122,8 @@ PDF を PDF.js でブラウザ上に描画してテクスチャにし、Three.js
 | `assets/img/works-sns.jpg` | Works 03 SNS依存予防アプリ | スマホ画面のキャプチャ |
 | `assets/img/works-alarm.jpg` | Works 04 アラームアプリ | 同上 |
 | `assets/img/ogp.png` | SNSシェア時のサムネイル | 1200×630px |
-| `assets/card/front.pdf` | デジタル名刺の表面 | 名刺の実寸（91×55mm） |
-| `assets/card/back.pdf` | デジタル名刺の裏面 | 同上 |
+| `assets/card/front.webp` | デジタル名刺の表面 | `tools/card-to-webp.py` で生成 |
+| `assets/card/back.webp` | デジタル名刺の裏面 | 同上 |
 
 プロフィール写真の表示位置は `style.css` の `.hero__media img` にある
 `object-position: center 22%;` で調整できます（顔の位置に合わせて数値を変更）。

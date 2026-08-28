@@ -697,7 +697,8 @@
   </section>
 
   <!-- ============ CARD（デジタル名刺） ============ -->
-  <!-- assets/card/front.pdf と back.pdf を置くと表示されます（未設置ならセクションごと非表示） -->
+  <!-- assets/card/front.webp と back.webp があると表示されます（未設置ならセクションごと非表示）
+       画像は名刺の PDF から tools/card-to-webp.py で書き出します -->
   <section class="section" id="card">
     <div class="container">
       <div class="section__head">
@@ -711,8 +712,8 @@
       </div>
 
       <div class="card3d" id="card3d"
-           data-front="assets/card/front.pdf"
-           data-back="assets/card/back.pdf">
+           data-front="assets/card/front.webp"
+           data-back="assets/card/back.webp">
         <div class="card3d__stage">
           <canvas class="card3d__canvas" aria-label="3Dで表示した名刺" role="img"></canvas>
           <p class="card3d__status" role="status">名刺を読み込んでいます…</p>
